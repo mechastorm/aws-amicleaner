@@ -30,7 +30,7 @@ class OrphanSnapshotCleaner(object):
             ]}, {
             'Name': 'description',
             'Values': [
-                'Created by CreateImage*'
+                'Created by CreateImage*','','Copied for DestinationAmi*'
             ]
         }]
 
@@ -67,7 +67,8 @@ class OrphanSnapshotCleaner(object):
             Filters=snap_filter, OwnerIds=[owner_id]
         )
 
-        all_snaps = [snap.get("SnapshotId") for snap in resp["Snapshots"]]
+        print("{}".format(resp["Snapshots"][0]))
+        all_snaps = [snap.get("SnapshotId") for snap in resp["Snapshots"] if snap.get("StartTime").replace(tzinfo=None) < datetime(2018,6,1)]
         return list(set(all_snaps) - set(used_snaps))
 
     def clean(self, snapshots):
