@@ -8,8 +8,8 @@ import boto3
 from botocore.exceptions import ClientError
 from botocore.config import Config
 
-from .resources.config import BOTO3_RETRIES
-from .resources.models import AMI
+from resources.config import BOTO3_RETRIES
+from resources.models import AMI
 
 from datetime import datetime
 
@@ -67,8 +67,7 @@ class OrphanSnapshotCleaner(object):
             Filters=snap_filter, OwnerIds=[owner_id]
         )
 
-        print("{}".format(resp["Snapshots"][0]))
-        all_snaps = [snap.get("SnapshotId") for snap in resp["Snapshots"] if snap.get("StartTime").replace(tzinfo=None) < datetime(2018,6,1)]
+        all_snaps = [snap.get("SnapshotId") for snap in resp["Snapshots"]]
         return list(set(all_snaps) - set(used_snaps))
 
     def clean(self, snapshots):
