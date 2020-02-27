@@ -119,8 +119,8 @@ class Fetcher(object):
                       for asg in resp.get("AutoScalingGroups", [])
                       if asg.get("DesiredCapacity", 0) == 0]
 
-        zeroed_lt_names = [lt.get("LaunchTemplateName", "")
-                        for lt in zeroed_lts]
+        zeroed_lt_names = [lt.get("LaunchTemplateName", "") for lt in zeroed_lts
+                           if lt.get("LaunchTemplateName", "") != "" ]  # Fixes empty ASG names
 
         zeroed_lt_versions = [lt.get("LaunchTemplateVersion", "")
                         for lt in zeroed_lts]
